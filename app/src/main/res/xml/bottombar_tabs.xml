@@ -1,0 +1,19 @@
+<tabs>
+    <tab
+        id="@+id/tab_chats"
+        icon="@drawable/ic_forum"
+        title="Chats" />
+
+    <tab
+        id="@+id/tab_friends"
+        icon="@drawable/ic_friends"
+        title="Friends" />
+    <tab
+        id="@+id/tab_request"
+        icon="@drawable/ic_request"
+        title="Requests" />
+    <tab
+        id="@+id/tab_other"
+        icon="@drawable/ic_other"
+        title="Other" />
+</tabs>

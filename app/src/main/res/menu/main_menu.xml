@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_main_profile"
+        android:title="@string/profile" />
+    <item
+        android:id="@+id/menu_main_find_friend"
+        android:title="@string/suggest_friends" />
+    <item
+        android:id="@+id/menu_main_logout"
+        android:title="@string/log_out" />
+</menu>

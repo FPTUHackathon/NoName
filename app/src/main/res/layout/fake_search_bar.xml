@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/actionBarSize"
+    android:orientation="horizontal"
+    android:background="@color/colorPrimary"
+    >
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_search"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Find friends, message ..."
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="32dp"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="15sp"
+        />
+</LinearLayout>
