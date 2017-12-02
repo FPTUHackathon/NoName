@@ -13,11 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.dev.noname.lover.MainActivity;
 import com.dev.noname.lover.R;
-import com.dev.noname.lover.Utils.Constants;
+import com.dev.noname.lover.utils.Constants;
 import com.dev.noname.lover.activity.ProfileActivity;
-import com.dev.noname.lover.activity.UsersActivity;
 import com.dev.noname.lover.adapter.Rv_Other_Adapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;

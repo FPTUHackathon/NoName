@@ -6,13 +6,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
 
-import com.dev.noname.lover.activity.UsersActivity;
 import com.dev.noname.lover.activity.StartActivity;
 import com.dev.noname.lover.activity.SearchActivity;
 import com.dev.noname.lover.fragment.ChatsFragment;
@@ -21,12 +18,16 @@ import com.dev.noname.lover.fragment.OtherFragment;
 import com.dev.noname.lover.fragment.RequestsFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private LinearLayout mFakeSearchBar;
+    private DatabaseReference mUserRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +69,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mAuth=FirebaseAuth.getInstance();
+
+        if (mAuth.getCurrentUser() != null) {
+
+
+            mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+
+        }
+
     }
 
     @Override
@@ -81,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
 
-           // mUserRef.child("online").setValue("true");
+            mUserRef.child("online").setValue("true");
 
         }
     }
@@ -92,43 +101,19 @@ public class MainActivity extends AppCompatActivity {
         finish();
 
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-
-
-        return true;
-    }
 
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
+    protected void onStop() {
+        super.onStop();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if(item.getItemId() == R.id.menu_main_logout){
+        if(currentUser != null) {
 
-           // mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
-
-            FirebaseAuth.getInstance().signOut();
-            sendToStart();
-
+            mUserRef.child("online").setValue("false");
+            mUserRef.child("last_temp").setValue(ServerValue.TIMESTAMP);
         }
-
-        if(item.getItemId() == R.id.menu_main_find_friend){
-
-            Intent settingsIntent = new Intent(MainActivity.this, SearchActivity.class);
-            startActivity(settingsIntent);
-
-        }
-
-        if(item.getItemId() == R.id.menu_main_profile){
-
-            Intent settingsIntent = new Intent(MainActivity.this, UsersActivity.class);
-            startActivity(settingsIntent);
-
-        }
-        return true;
     }
+
+
 }

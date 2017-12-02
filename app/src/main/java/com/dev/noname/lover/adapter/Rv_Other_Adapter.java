@@ -13,6 +13,11 @@ import com.dev.noname.lover.R;
 import com.dev.noname.lover.activity.StartActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+
+import java.util.Map;
 
 /**
  * Created by Admin on 12/1/2017.
@@ -52,6 +57,10 @@ public class Rv_Other_Adapter extends RecyclerView.Adapter<Rv_Other_Adapter.View
                       break;
                     }
                     case 1:{
+                        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        DatabaseReference UReference =FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+                        UReference.child("online").setValue("false");
+                        UReference.child("last_temp").setValue(ServerValue.TIMESTAMP);
                         FirebaseAuth.getInstance().signOut();
                         Intent i= new Intent(activity, StartActivity.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);

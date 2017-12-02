@@ -6,7 +6,7 @@
     android:background="?android:selectableItemBackground">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/user_single_image"
+        android:id="@+id/chat_user_single_image"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginBottom="16dp"
@@ -15,32 +15,32 @@
         android:src="@drawable/user" />
 
     <TextView
-        android:id="@+id/user_single_name"
+        android:id="@+id/chat_user_single_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/user_single_image"
+        android:layout_alignTop="@+id/chat_user_single_image"
         android:layout_marginStart="20dp"
-        android:layout_toEndOf="@+id/user_single_image"
+        android:layout_toEndOf="@+id/chat_user_single_image"
         android:text="Display Name"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/user_single_status"
+        android:id="@+id/chat_user_single_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/user_single_name"
-        android:layout_below="@+id/user_single_name"
+        android:layout_alignStart="@+id/chat_user_single_name"
+        android:layout_below="@+id/chat_user_single_name"
         android:layout_marginTop="10dp"
-        android:text="Status" />
+        android:text="User default Status" />
 
     <ImageView
         android:id="@+id/user_single_online_icon"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_alignTop="@+id/user_single_name"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_alignTop="@+id/chat_user_single_name"
         android:layout_marginStart="10dp"
-        android:layout_toEndOf="@+id/user_single_name"
+        android:layout_toEndOf="@+id/chat_user_single_name"
         android:visibility="invisible"
         app:srcCompat="@drawable/online_icon" />
 

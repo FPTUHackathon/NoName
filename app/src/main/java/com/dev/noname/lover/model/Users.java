@@ -9,15 +9,22 @@ public class Users {
     public String image;
     public String status;
     public String thumb_image;
-
+    public String online;
+    public long last_online;
     public Users(){
 
     }
-    public Users(String name, String image, String status, String thumb_image) {
+
+
+
+    public Users(String name, String image, String status, String thumb_image, String online, long last_online) {
         this.name = name;
         this.image = image;
         this.status = status;
         this.thumb_image = thumb_image;
+        this.online=online;
+        this.last_online=last_online;
+
     }
 
     public String getName() {
@@ -50,5 +57,21 @@ public class Users {
 
     public void setThumb_image(String thumb_image) {
         this.thumb_image = thumb_image;
+    }
+
+    public String getOnline() {
+        return online;
+    }
+
+    public void setOnline(String online) {
+        this.online = online;
+    }
+
+    public long getLast_online() {
+        return last_online;
+    }
+
+    public void setLast_online(long last_online) {
+        this.last_online = last_online;
     }
 }

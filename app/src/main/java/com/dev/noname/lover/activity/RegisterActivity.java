@@ -15,7 +15,7 @@ import com.dev.noname.lover.R;
 
 
 import com.dev.noname.lover.MainActivity;
-import com.dev.noname.lover.Utils.Constants;
+import com.dev.noname.lover.utils.Constants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

@@ -10,8 +10,7 @@ import android.widget.Toast;
 
 
 import com.dev.noname.lover.R;
-import com.dev.noname.lover.Utils.Constants;
-import com.dev.noname.lover.model.Users;
+import com.dev.noname.lover.utils.Constants;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

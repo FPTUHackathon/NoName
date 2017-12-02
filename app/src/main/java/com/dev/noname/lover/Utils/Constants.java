@@ -1,4 +1,4 @@
-package com.dev.noname.lover.Utils;
+package com.dev.noname.lover.utils;
 
 /**
  * Created by An on 11/29/2017.
@@ -12,4 +12,5 @@ public class Constants {
     public static final String DEVICE_TOKEN="device_token";
     public static final String USER_ID="user_id";
     public static final String FRIEND_REQ="Friend_req";
+    public static final String ONLINE="online";
 }
