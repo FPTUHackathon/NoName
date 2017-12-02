@@ -52,10 +52,7 @@ public class ChatsFragment extends Fragment {
         if (current!=null){
             UID=current.getUid();
             mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(UID);
-
-
-
-
+            
             mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
             userList = new ArrayList<>();
