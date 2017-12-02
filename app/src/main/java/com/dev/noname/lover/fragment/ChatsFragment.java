@@ -51,7 +51,7 @@ public class ChatsFragment extends Fragment {
         FirebaseUser current=mAuth.getCurrentUser();
         if (current!=null){
             UID=current.getUid();
-            mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(UID);
+            mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friend").child(UID);
             
             mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 

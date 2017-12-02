@@ -26,6 +26,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private DatabaseReference mUsersReference;
 
+
     private TextView tvName;
     private TextView tvStatus;
     private CircleImageView imv_avatar;

@@ -74,7 +74,7 @@ public class OtherFragment extends Fragment {
     }
 
     private void initValue() {
-        list=new String[]{"Find chat room","Logout"};
+        list=new String[]{"Group chat","Find nearby friend","Dating","Logout"};
     }
 
     private void initEvent() {

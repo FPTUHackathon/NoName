@@ -54,7 +54,7 @@ public class FriendsFragment extends Fragment {
         View mView = inflater.inflate(R.layout.fragment_friends, container, false);
         mAuth=FirebaseAuth.getInstance();
         UID=mAuth.getCurrentUser().getUid();
-        mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(UID);
+        mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friend").child(UID);
 
 
 

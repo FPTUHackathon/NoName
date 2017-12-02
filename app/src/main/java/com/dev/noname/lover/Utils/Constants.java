@@ -13,4 +13,5 @@ public class Constants {
     public static final String USER_ID="user_id";
     public static final String FRIEND_REQ="Friend_req";
     public static final String ONLINE="online";
+    public static final String GROUP = "Group";
 }

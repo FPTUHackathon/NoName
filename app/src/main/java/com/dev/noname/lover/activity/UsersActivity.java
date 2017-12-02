@@ -74,7 +74,7 @@ public class UsersActivity extends AppCompatActivity {
         user_id = getIntent().getStringExtra(Constants.USER_ID);
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
         mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_req");
-        mFriendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
+        mFriendDatabase = FirebaseDatabase.getInstance().getReference().child("Friend");
         mRootRef=FirebaseDatabase.getInstance().getReference();
         mCurrent_User = FirebaseAuth.getInstance().getCurrentUser();
     }
@@ -118,7 +118,7 @@ public class UsersActivity extends AppCompatActivity {
                     } else if(req_type.equals("sent")) {
 
                         mCurrent_State = "sent";
-                        btnAddFriend.setText("Cancel Friends Request");
+                        btnAddFriend.setText("Cancel Friend Request");
                         btnAddFriend.setClickable(false);
 
                     }
@@ -190,7 +190,7 @@ public class UsersActivity extends AppCompatActivity {
                             } else {
 
                                 mCurrent_State = "req_sent";
-                                btnAddFriend.setText("Cancel Friends Request");
+                                btnAddFriend.setText("Cancel Friend Request");
 
                             }
 
@@ -218,7 +218,7 @@ public class UsersActivity extends AppCompatActivity {
 
                                     btnAddFriend.setEnabled(true);
                                     mCurrent_State = "not_friends";
-                                    btnAddFriend.setText("Send Friends Request");
+                                    btnAddFriend.setText("Send Friend Request");
 
 
                                 }
@@ -237,8 +237,8 @@ public class UsersActivity extends AppCompatActivity {
                     final String currentDate = DateFormat.getDateTimeInstance().format(new Date());
 
                     Map friendsMap = new HashMap();
-                    friendsMap.put("Friends/" + mCurrent_User.getUid() + "/" + user_id + "/date", currentDate);
-                    friendsMap.put("Friends/" + user_id + "/"  + mCurrent_User.getUid() + "/date", currentDate);
+                    friendsMap.put("Friend/" + mCurrent_User.getUid() + "/" + user_id + "/date", currentDate);
+                    friendsMap.put("Friend/" + user_id + "/"  + mCurrent_User.getUid() + "/date", currentDate);
 
 
                     friendsMap.put("Friend_req/" + mCurrent_User.getUid() + "/" + user_id, null);
@@ -279,8 +279,8 @@ public class UsersActivity extends AppCompatActivity {
                 if(mCurrent_State.equals("friends")){
 
                     Map unfriendMap = new HashMap();
-                    unfriendMap.put("Friends/" + mCurrent_User.getUid() + "/" + user_id, null);
-                    unfriendMap.put("Friends/" + user_id + "/" + mCurrent_User.getUid(), null);
+                    unfriendMap.put("Friend/" + mCurrent_User.getUid() + "/" + user_id, null);
+                    unfriendMap.put("Friend/" + user_id + "/" + mCurrent_User.getUid(), null);
 
                     mRootRef.updateChildren(unfriendMap, new DatabaseReference.CompletionListener() {
                         @Override

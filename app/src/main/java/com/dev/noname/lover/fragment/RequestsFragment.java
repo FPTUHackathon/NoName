@@ -17,6 +17,7 @@ import com.dev.noname.lover.adapter.Rv_Request_Adapter;
 import com.dev.noname.lover.model.Users;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,10 +35,13 @@ public class RequestsFragment extends Fragment {
     private RecyclerView rv_request;
     private TextView tvAlert;
 
+    private FirebaseUser user;
     private DatabaseReference mFriendReqRef;
     private DatabaseReference mUserDataRef;
     private List<String> list_key =new ArrayList<>();
     private List<Users> list_user=new ArrayList<>();
+
+    private Rv_Request_Adapter adapter;
     public RequestsFragment() {
         // Required empty public constructor
     }
@@ -51,8 +55,8 @@ public class RequestsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Firebase//
-        FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
-        mFriendReqRef= FirebaseDatabase.getInstance().getReference().child(Constants.FRIEND_REQ).child(user.getUid());
+        user= FirebaseAuth.getInstance().getCurrentUser();
+        mFriendReqRef= FirebaseDatabase.getInstance().getReference().child(Constants.FRIEND_REQ);
     }
 
     @Override
@@ -64,8 +68,9 @@ public class RequestsFragment extends Fragment {
         tvAlert=mView.findViewById(R.id.tvAlertRequest);
         initEvent();
 
-        Rv_Request_Adapter adapter=new Rv_Request_Adapter(list_user);
+        adapter=new Rv_Request_Adapter(list_user);
         rv_request.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rv_request.setHasFixedSize(true);
         rv_request.setAdapter(adapter);
         return mView;
     }
@@ -73,13 +78,62 @@ public class RequestsFragment extends Fragment {
 
 
     private void initEvent() {
+
+
         mFriendReqRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                        if (dataSnapshot1.child("request_type").getValue().toString().equals("received")){
-                        list_key.add(dataSnapshot1.getKey());
+
+                if (dataSnapshot.hasChild(user.getUid())){
+
+                    mUserDataRef=FirebaseDatabase.getInstance().getReference().child("Users");
+                    for (String key:list_key) {
+                        mUserDataRef.child(key).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                String name= dataSnapshot.child(Constants.NAME).getValue().toString();
+                                String thumb_image=dataSnapshot.child(Constants.THUMB_IMAGE).getValue().toString();
+                                Users user=new Users();
+                                user.setName(name);
+                                user.setThumb_image(thumb_image);
+                                list_user.add(user);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                     }
+
+                    FirebaseDatabase.getInstance().getReference(user.getUid()).addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }else {
+                    tvAlert.setVisibility(View.GONE);
                 }
 
             }
@@ -89,25 +143,7 @@ public class RequestsFragment extends Fragment {
 
             }
         });
-        mUserDataRef=FirebaseDatabase.getInstance().getReference().child("Users");
-        for (String key:list_key) {
-            mUserDataRef.child(key).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                 String name= dataSnapshot.child(Constants.NAME).getValue().toString();
-                 String thumb_image=dataSnapshot.child(Constants.THUMB_IMAGE).getValue().toString();
-                 Users user=new Users();
-                 user.setName(name);
-                 user.setThumb_image(thumb_image);
-                 list_user.add(user);
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
     }
 
 }

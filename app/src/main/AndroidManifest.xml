@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.dev.noname.lover">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".utils.Lover"
         android:allowBackup="true"
@@ -34,7 +36,10 @@
         <activity android:name=".activity.StartActivity" />
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".activity.ProfileActivity" />
-        <activity android:name=".activity.ChatActivity"></activity>
+        <activity
+            android:name=".activity.ChatActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".activity.GroupChat"></activity>
     </application>
 
 </manifest>

@@ -103,9 +103,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//
+//        if(currentUser != null) {
+//
+//            mUserRef.child("online").setValue("false");
+//            mUserRef.child("last_temp").setValue(ServerValue.TIMESTAMP);
+//        }
+//    }
+
+
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if(currentUser != null) {
@@ -114,6 +127,4 @@ public class MainActivity extends AppCompatActivity {
             mUserRef.child("last_temp").setValue(ServerValue.TIMESTAMP);
         }
     }
-
-
 }

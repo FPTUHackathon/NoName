@@ -7,23 +7,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dev.noname.lover.R;
+import com.dev.noname.lover.model.ChatUserMessageHolder;
 import com.dev.noname.lover.model.Messages;
+import com.dev.noname.lover.model.MyMessageViewHolder;
+import com.dev.noname.lover.model.UserMessageHolder;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Admin on 12/2/2017.
  */
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
+public class MessageAdapter extends RecyclerView.Adapter<MyMessageViewHolder> {
 
 
     private List<Messages> mMessageList;
@@ -32,37 +34,40 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public MessageAdapter(List<Messages> mMessageList) {
 
         this.mMessageList = mMessageList;
-
     }
 
     @Override
-    public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyMessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.message_single_layout, parent, false);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(viewType, parent, false);
 
-        return new MessageViewHolder(v);
-
-    }
-
-    public class MessageViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView messageText;
-        public CircleImageView profileImage;
-        public TextView displayName;
-
-        public MessageViewHolder(View view) {
-            super(view);
-
-            messageText = view.findViewById(R.id.message_text_layout);
-            profileImage = view.findViewById(R.id.message_profile_layout);
-            displayName = view.findViewById(R.id.name_text_layout);
+        MyMessageViewHolder holder = null;
+        switch (viewType) {
+            case R.layout.message_single_layout:
+                holder = new UserMessageHolder(view);
+                break;
+            case R.layout.chat_user_message:
+                holder = new ChatUserMessageHolder(view);
+                break;
 
         }
+        return holder;
+
     }
 
     @Override
-    public void onBindViewHolder(final MessageViewHolder viewHolder, int i) {
+    public int getItemViewType(int position) {
+       String user= mMessageList.get(position).getFrom();
+      // String type=mMessageList.get(position).getType();
+        if (user.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            return R.layout.chat_user_message;
+        }else
+            return R.layout.message_single_layout           ;
+    }
+
+    @Override
+    public void onBindViewHolder(final MyMessageViewHolder viewHolder, int i) {
 
         Messages c = mMessageList.get(i);
 
@@ -74,13 +79,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                String name = dataSnapshot.child("name").getValue().toString();
                 String image = dataSnapshot.child("thumb_image").getValue().toString();
-
-                viewHolder.displayName.setText(name);
-
-                Picasso.with(viewHolder.profileImage.getContext()).load(image)
-                        .placeholder(R.drawable.user).into(viewHolder.profileImage);
+                viewHolder.setImage(image);
 
             }
 
@@ -90,7 +90,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             }
         });
 
-        viewHolder.messageText.setText(c.getMessage());
+        viewHolder.bind(mMessageList.get(i));
+
 
     }
 

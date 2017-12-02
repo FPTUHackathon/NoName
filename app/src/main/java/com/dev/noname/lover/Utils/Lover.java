@@ -47,7 +47,7 @@ public class Lover extends Application {
 
                     if (dataSnapshot != null) {
 
-                        mUserDatabase.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
+                        mUserDatabase.child("last_temp").onDisconnect().setValue(ServerValue.TIMESTAMP);
 
                     }
 
