@@ -8,11 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dev.noname.lover.R;
+import com.dev.noname.lover.activity.DatingActivity;
 import com.dev.noname.lover.activity.GroupChatActivity;
 import com.dev.noname.lover.activity.NearFriendActivity;
+import com.dev.noname.lover.activity.NewDateActivity;
 import com.dev.noname.lover.activity.StartActivity;
+import com.dev.noname.lover.utils.GPSTracker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -74,11 +78,25 @@ public class Rv_Other_Adapter extends RecyclerView.Adapter<Rv_Other_Adapter.View
                         break;
                     }
                     case 1:{
-                        Intent i = new Intent(activity, NearFriendActivity.class);
-                        activity.startActivity(i);
+                        GPSTracker gpsTracker = new GPSTracker(activity);
+                        if ((gpsTracker.getLongitude()==0 && gpsTracker.getLatitude()==0))
+                            Toast.makeText(activity, "Can't read location data, pls try again!", Toast.LENGTH_SHORT).show();
+                        else {
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users");
+                            reference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("long").setValue(gpsTracker.getLongitude());
+                            reference.child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("lat").setValue(gpsTracker.getLatitude());
+                            FirebaseDatabase.getInstance().getReference().child("Location").
+                                    setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            Intent i= new Intent(activity, NearFriendActivity.class);
+                           // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            activity.startActivity(i);
+                        }
+
                         break;
                     }
                     case 2:{
+                        Intent i= new Intent(activity, NewDateActivity.class);
+                        activity.startActivity(i);
                         break;
                     }
                     default:break;

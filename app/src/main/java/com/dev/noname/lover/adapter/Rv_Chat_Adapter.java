@@ -1,8 +1,11 @@
 package com.dev.noname.lover.adapter;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,10 @@ import com.dev.noname.lover.activity.ChatActivity;
 import com.dev.noname.lover.model.Friend;
 import com.dev.noname.lover.model.Users;
 import com.dev.noname.lover.utils.Constants;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.FirebaseDatabase;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -78,12 +85,15 @@ public class Rv_Chat_Adapter extends RecyclerView.Adapter<Rv_Chat_Adapter.ViewHo
         final Users user=listUser.get(position);
         if (user!=null){
             holder.tvName.setText(user.getName());
-            if (user.getImage().equals("default")){
-                holder.avatar.setImageResource(R.drawable.user);
-            } else {
-                Picasso.with(holder.layout.getContext()).load(user.getImage()).into(holder.avatar);
-            }
-            if (!user.getOnline().equals("true")){
+//            if (user.getImage().equals("default")){
+//                holder.avatar.setImageResource(R.drawable.user);
+//            } else {
+//
+//            }
+            Picasso.with(holder.layout.getContext()).load(user.getImage()).placeholder(R.drawable.user).into(holder.avatar);
+            String online=user.getOnline();
+            if (!TextUtils.isEmpty(online))
+            if (!online.equals("true")){
                 holder.imv_online.setVisibility(View.INVISIBLE);
 
             }else{
@@ -104,6 +114,37 @@ public class Rv_Chat_Adapter extends RecyclerView.Adapter<Rv_Chat_Adapter.ViewHo
                     i.putExtra(Constants.NAME,user.getName());
                     i.putExtra(Constants.USER_ID,listUser.get(holder.getAdapterPosition()).getId());
                     activity.startActivity(i);
+                }
+            });
+            holder.layout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    new SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Are you sure?")
+                            .setContentText("Won't be able to recover this file!")
+                            .setConfirmText("Yes,delete it!")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.dismissWithAnimation();
+                                    FirebaseDatabase.getInstance().getReference().child("Chat")
+                                            .child(listUser.get(holder.getAdapterPosition()).getId()).removeValue()
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    new SweetAlertDialog(activity
+                                                            , SweetAlertDialog.SUCCESS_TYPE)
+                                                            .setTitleText("Good job!")
+                                                            .setContentText("You clicked the button!")
+                                                            .show();
+                                                    notifyDataSetChanged();
+                                                }
+                                            });
+
+                                }
+                            })
+                            .show();
+                    return true;
                 }
             });
         }

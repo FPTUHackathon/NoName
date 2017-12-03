@@ -4,8 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
+
 
 import com.dev.noname.lover.R;
 import com.dev.noname.lover.adapter.Rv_Place_Adapter;
@@ -26,7 +26,10 @@ public class NearFriendActivity extends AppCompatActivity {
     protected ArrayList<Location> listLocation = new ArrayList<>();
     protected Rv_Place_Adapter adapter;
     protected RecyclerView recyclerView;
-    GPSTracker gpsTracker = new GPSTracker(this);
+    private Toolbar toolbar;
+    private ArrayList<String> listuserID=new ArrayList<>();
+    //GPSTracker gpsTracker = new GPSTracker(this);
+
     private void loadLocaltionFromDB(){
 
         DatabaseReference db= FirebaseDatabase.getInstance().getReference().child("Users");
@@ -60,7 +63,26 @@ public class NearFriendActivity extends AppCompatActivity {
                     }
 
                 }
-                DatabaseReference db1= FirebaseDatabase.getInstance().getReference().child("User");
+                //Get listUserID
+                DatabaseReference db1= FirebaseDatabase.getInstance().getReference().child("Location");
+                db1.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        try{
+                            listuserID.add(dataSnapshot.getKey());
+                            adapter.notifyDataSetChanged();
+                            // Log.d("NearFriendACtivity", "onCreate: "+adapter.getItemCount());
+                            //   Toast.makeText(getApplicationContext(), location.toString(), Toast.LENGTH_SHORT).show();
+                        } catch (NullPointerException ex){
+                            ex.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
             }
 
@@ -76,15 +98,19 @@ public class NearFriendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_near_friend);
         loadLocaltionFromDB();
 
-        recyclerView = (RecyclerView)findViewById(R.id.nearFriendRecyclerView);
+        recyclerView = findViewById(R.id.nearFriendRecyclerView);
+        toolbar=findViewById(R.id.tool_near_friend_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Find near friend");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
 
-        adapter = new Rv_Place_Adapter(listLocation,this);
+        adapter = new Rv_Place_Adapter(listLocation,this,listuserID);
         recyclerView.setAdapter(adapter);
-
 
 
     }

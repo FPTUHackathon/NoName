@@ -14,9 +14,11 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.dev.noname.lover.R;
@@ -168,7 +170,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-
         mRootRef.child("Chat").child(mCurrentUserId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -229,14 +230,39 @@ public class ChatActivity extends AppCompatActivity {
         mChatAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent();
-                i.setType("image/*");
-                i.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(i,"Select image"),Gallery_Pick_Code);
+               showPopup(view);
             }
         });
 
     }
+
+    private void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        // Inflate the menu from xml
+        popup.inflate(R.menu.pop_up_menu);
+        // Setup menu item selection
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.sendImage:{
+                        Intent i=new Intent();
+                        i.setType("image/*");
+                        i.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(Intent.createChooser(i,"Select image"),Gallery_Pick_Code);
+                        return true;
+                    }
+
+                    case R.id.sendFile:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+
+        popup.show();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
