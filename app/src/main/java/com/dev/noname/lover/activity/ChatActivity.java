@@ -142,7 +142,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String last_temp = dataSnapshot.child("last_temp").getValue().toString();
                 String online = dataSnapshot.child("online").getValue().toString();
-                String image = dataSnapshot.child("image").getValue().toString();
+                String image = dataSnapshot.child(Constants.THUMB_IMAGE).getValue().toString();
 
                 if(online.equals("true")) {
 

@@ -1,7 +1,6 @@
 package com.dev.noname.lover.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,15 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dev.noname.lover.R;
-import com.dev.noname.lover.activity.GroupChat;
+import com.dev.noname.lover.activity.GroupChatActivity;
+import com.dev.noname.lover.activity.NearFriendActivity;
 import com.dev.noname.lover.activity.StartActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
-
-import java.util.Map;
 
 /**
  * Created by Admin on 12/1/2017.
@@ -61,7 +58,7 @@ public class Rv_Other_Adapter extends RecyclerView.Adapter<Rv_Other_Adapter.View
             public void onClick(View view, int position, boolean isLongClick) {
                 switch (position){
                     case 0:{
-                        Intent i =new Intent(activity, GroupChat.class);
+                        Intent i =new Intent(activity, GroupChatActivity.class);
                         activity.startActivity(i);
                       break;
                     }
@@ -77,7 +74,8 @@ public class Rv_Other_Adapter extends RecyclerView.Adapter<Rv_Other_Adapter.View
                         break;
                     }
                     case 1:{
-
+                        Intent i = new Intent(activity, NearFriendActivity.class);
+                        activity.startActivity(i);
                         break;
                     }
                     case 2:{

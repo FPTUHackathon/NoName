@@ -9,6 +9,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -43,6 +44,9 @@ import id.zelory.compressor.Compressor;
 public class EditProfileActivity extends AppCompatActivity {
     private TextInputLayout edtName;
     private TextInputLayout edtStatus;
+    private TextInputLayout edtBirth;
+    private TextInputLayout edtCity;
+    private TextInputLayout edtHobby;
 
     private Bundle bundle;
 
@@ -84,6 +88,9 @@ public class EditProfileActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Edit your profile");
         edtName=findViewById(R.id.edt_editProfile_Name);
         edtStatus=findViewById(R.id.edt_editProfile_status);
+        edtHobby=findViewById(R.id.edt_editProfile_hobby);
+        edtCity=findViewById(R.id.edt_editProfile_home);
+        edtBirth=findViewById(R.id.edt_editProfile_age);
         btnUpdate=findViewById(R.id.btn_editProfile_update);
         mAvatar=findViewById(R.id.imv_avatar);
 
@@ -97,10 +104,12 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void initValue() {
+
         if (bundle!=null){
             edtName.getEditText().setText(bundle.getString(Constants.NAME));
             edtStatus.getEditText().setText(bundle.getString(Constants.STATUS));
         }
+
     }
 
     private void initEvent() {
@@ -112,7 +121,13 @@ public class EditProfileActivity extends AppCompatActivity {
                 String name = dataSnapshot.child(Constants.NAME).getValue().toString();
                 final String image = dataSnapshot.child(Constants.IMAGE).getValue().toString();
                 String status = dataSnapshot.child(Constants.STATUS).getValue().toString();
-               // String thumb_image = dataSnapshot.child(Constants.).getValue().toString();
+//                String city = dataSnapshot.child(Constants.CITY).getValue().toString();
+//                String birthday = dataSnapshot.child(Constants.BIRTHDAY).getValue().toString();
+//                String hobby = dataSnapshot.child(Constants.HOBBY).getValue().toString();
+//
+//                edtBirth.getEditText().setText(birthday+" ");
+//                edtCity.getEditText().setText(city+" ");
+//                edtHobby.getEditText().setText(hobby+" ");
 
                 edtName.getEditText().setText(name);
                 edtStatus.getEditText().setText(status);
@@ -134,6 +149,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     });
 
                 }
+
 
 
             }

@@ -11,6 +11,10 @@ public class Users {
     public String thumb_image;
     public String online;
     public long last_online;
+
+    public String birthday;
+    public String city;
+    public String hobby;
     public Users(){
 
     }
@@ -74,4 +78,28 @@ public class Users {
     public void setLast_online(long last_online) {
         this.last_online = last_online;
     }
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getHobby() {
+        return hobby;
+    }
+
+    public void setHobby(String hobby) {
+        this.hobby = hobby;
+    }
+
 }

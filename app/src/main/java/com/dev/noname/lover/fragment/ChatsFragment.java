@@ -5,12 +5,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.dev.noname.lover.R;
+import com.dev.noname.lover.adapter.Rv_Chat_Adapter;
 import com.dev.noname.lover.adapter.Rv_Friend_Adapter;
+import com.dev.noname.lover.model.Friend;
+import com.dev.noname.lover.model.Messages;
 import com.dev.noname.lover.model.Users;
 import com.dev.noname.lover.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,11 +36,12 @@ public class ChatsFragment extends Fragment {
     FirebaseAuth mAuth;
     public View layout;
     public String UID;
-    public ArrayList<Users> userList;
-    public ArrayList<String> friendList;
-    public Rv_Friend_Adapter mAdapter;
+    public ArrayList<Friend> friendList;
+
+    public Rv_Chat_Adapter mAdapter;
+    private DatabaseReference mFriendMessDatabase;
     private DatabaseReference mUsersDatabase;
-    private DatabaseReference mFriendsDatabase;
+
     public static ChatsFragment newInstance() {
         ChatsFragment fragment = new ChatsFragment();
         return fragment;
@@ -51,18 +56,26 @@ public class ChatsFragment extends Fragment {
         FirebaseUser current=mAuth.getCurrentUser();
         if (current!=null){
             UID=current.getUid();
-            mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friend").child(UID);
-            
-            mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
-            userList = new ArrayList<>();
+            mFriendMessDatabase=FirebaseDatabase.getInstance().getReference().child("messages").child(current.getUid());
+
             friendList = new ArrayList<>();
-            mFriendsDatabase.addValueEventListener(new ValueEventListener() {
+            mFriendMessDatabase.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     friendList.clear();
                     for (DataSnapshot dnsp:dataSnapshot.getChildren())
-                        friendList.add(dnsp.getKey());
+                    {   int num_unread=0;
+
+                        for (DataSnapshot dn : dnsp.getChildren()){
+                            Messages messages =dn.getValue(Messages.class);
+                            if (messages.isSeen())
+                                num_unread++;
+
+                        }
+                        Log.e("Unread",num_unread+"");
+                        friendList.add(new Friend(dnsp.getKey(),num_unread));
+                    }
 
                 }
 
@@ -71,21 +84,24 @@ public class ChatsFragment extends Fragment {
 
                 }
             });
+            mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+
             mUsersDatabase.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    userList.clear();
-                    for (String ID : friendList){
+                    //friendList.clear();
+                    for (int i=0;i<friendList.size();i++){
+                        String ID = friendList.get(i).getId();
                         Map<String,Object> map =(Map) dataSnapshot.child(ID).getValue();
-                        Users users = new Users();
-                        users.setName(String.valueOf(map.get(Constants.NAME)));
-                        users.setStatus(String.valueOf(map.get(Constants.STATUS)));
-                        users.setImage(String.valueOf(map.get(Constants.IMAGE)));
+
+                        Friend f=friendList.get(i);
+                        f.setName(String.valueOf(map.get(Constants.NAME)));
+                        f.setStatus(String.valueOf(map.get(Constants.STATUS)));
+                        f.setImage(String.valueOf(map.get(Constants.THUMB_IMAGE)));
                         if (dataSnapshot.child(ID).hasChild(Constants.ONLINE))
-                            users.setOnline(String.valueOf(map.get(Constants.ONLINE)));
+                            f.setOnline(String.valueOf(map.get(Constants.ONLINE)));
                         else
-                            users.setOnline("false");
-                        userList.add(users);
+                            f.setOnline("false");
                         mAdapter.notifyDataSetChanged();
                     }
                 }
@@ -100,7 +116,7 @@ public class ChatsFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setHasFixedSize(true);
 
-            mAdapter = new Rv_Friend_Adapter(userList,getActivity(),friendList);
+            mAdapter = new Rv_Chat_Adapter(getActivity(),friendList);
             recyclerView.setAdapter(mAdapter);
         }
 

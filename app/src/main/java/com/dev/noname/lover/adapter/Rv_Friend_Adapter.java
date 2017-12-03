@@ -44,7 +44,7 @@ public class Rv_Friend_Adapter extends RecyclerView.Adapter<Rv_Friend_Adapter.Vi
         public ViewHolder(View v) {
             super(v);
             layout = v;
-            tvStatus = v.findViewById(R.id.chat_user_single_status);
+            tvStatus = v.findViewById(R.id.chat_last_mess);
             avatar=  v.findViewById(R.id.chat_user_single_image);
             tvName =  v.findViewById(R.id.chat_user_single_name);
             imv_online=v.findViewById(R.id.user_single_online_icon);

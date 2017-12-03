@@ -11,4 +11,5 @@
     <color name="background">#e9e6e6</color>
     <color name="white">#FFFFFF</color>
     <color name="colorCardView">#f7f7f7</color>
+    <color name="light_red">#ff4444</color>
 </resources>

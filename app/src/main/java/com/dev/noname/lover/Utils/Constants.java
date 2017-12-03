@@ -14,4 +14,7 @@ public class Constants {
     public static final String FRIEND_REQ="Friend_req";
     public static final String ONLINE="online";
     public static final String GROUP = "Group";
+    public static final String CITY="city";
+    public static final String BIRTHDAY = "birthday";
+    public static final String HOBBY="hobby";
 }

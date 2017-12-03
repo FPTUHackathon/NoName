@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.dev.noname.lover.R;
@@ -23,11 +25,53 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by Admin on 12/2/2017.
  */
 
-public class Rv_SearchAdapter  extends RecyclerView.Adapter<Rv_SearchAdapter.ViewHolder> {
+public class Rv_SearchAdapter  extends RecyclerView.Adapter<Rv_SearchAdapter.ViewHolder>
+        implements Filterable{
     private List<Users> values;
 
     private List<String> listID=new ArrayList<>();
+    private List<Users> userFiltered;
     private Activity activity;
+
+    //Constructor
+    public Rv_SearchAdapter(List<Users> myDataset, Activity activity) {
+        values = myDataset;
+        this.activity=activity;
+        this.userFiltered=values;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    userFiltered = values;
+                } else {
+                    List<Users> filteredList = new ArrayList<>();
+                    for (Users row : values) {
+
+                        if (row.getName().contains(charSequence)||row.getName().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    userFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = userFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                userFiltered = (List<Users>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
 
     public interface OnItemClick {
         void onClick(View view, int position, boolean isLongClick);
@@ -50,7 +94,7 @@ public class Rv_SearchAdapter  extends RecyclerView.Adapter<Rv_SearchAdapter.Vie
         private ViewHolder(View v) {
             super(v);
             layout = v;
-            textLastText = v.findViewById(R.id.chat_user_single_status);
+            textLastText = v.findViewById(R.id.chat_last_mess);
             avatar=  v.findViewById(R.id.chat_user_single_image);
             textName =  v.findViewById(R.id.chat_user_single_name);
             v.setOnClickListener(this);
@@ -74,12 +118,6 @@ public class Rv_SearchAdapter  extends RecyclerView.Adapter<Rv_SearchAdapter.Vie
     }
 
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public Rv_SearchAdapter(List<Users> myDataset, Activity activity) {
-        values = myDataset;
-        this.activity=activity;
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
@@ -91,9 +129,9 @@ public class Rv_SearchAdapter  extends RecyclerView.Adapter<Rv_SearchAdapter.Vie
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        final String name = values.get(position).getName();
+        final String name = userFiltered.get(position).getName();
         holder.textName.setText(name);
-        holder.textLastText.setText(values.get(position).getStatus());
+        holder.textLastText.setText(userFiltered.get(position).getStatus());
         holder.setOnClick(new OnItemClick() {
             @Override
             public void onClick(View view, int p, boolean isLongClick) {
@@ -110,12 +148,11 @@ public class Rv_SearchAdapter  extends RecyclerView.Adapter<Rv_SearchAdapter.Vie
         Picasso.with(activity).load(values.get(position)
                 .getImage()).placeholder(R.drawable.user).into(holder.avatar);
 
-
     }
 
 
     @Override
     public int getItemCount() {
-        return values.size();
+        return userFiltered.size();
     }
 }

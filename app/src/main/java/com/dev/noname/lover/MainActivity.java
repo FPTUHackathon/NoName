@@ -1,6 +1,10 @@
 package com.dev.noname.lover;
 
+import android.*;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -28,11 +32,46 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private LinearLayout mFakeSearchBar;
     private DatabaseReference mUserRef;
+
+
+
+    private void requestPermision(){
+        // Here, thisActivity is the current activity
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (this.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                if (this.shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+                } else {
+
+                    this.requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,},
+                            1999);
+                }
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                if (this.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                } else {
+
+                    this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,},
+                            1999);
+                }
+            }
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //--------------SearchBar-----------//
+        requestPermision();
         mFakeSearchBar=findViewById(R.id.search_bar_main);
         mFakeSearchBar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,17 +142,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//
-//        if(currentUser != null) {
-//
-//            mUserRef.child("online").setValue("false");
-//            mUserRef.child("last_temp").setValue(ServerValue.TIMESTAMP);
-//        }
-//    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if(currentUser != null) {
+
+            mUserRef.child("online").setValue("false");
+            mUserRef.child("last_temp").setValue(ServerValue.TIMESTAMP);
+        }
+    }
 
 
     @Override

@@ -4,6 +4,8 @@
     package="com.dev.noname.lover">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".utils.Lover"
@@ -14,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
+        <service android:name=".service.MessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,12 +42,26 @@
             android:name=".activity.RegisterActivity"
             android:parentActivityName=".activity.StartActivity" />
         <activity android:name=".activity.StartActivity" />
-        <activity android:name=".activity.SearchActivity" />
+        <activity
+            android:name=".activity.SearchActivity"
+            android:parentActivityName=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activity.ProfileActivity" />
         <activity
             android:name=".activity.ChatActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".activity.GroupChat"></activity>
+        <activity
+            android:name=".activity.GroupChatActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity android:name=".activity.NearFriendActivity"
+            android:parentActivityName=".activity.NearFriendActivity"
+            ></activity>
     </application>
 
 </manifest>
